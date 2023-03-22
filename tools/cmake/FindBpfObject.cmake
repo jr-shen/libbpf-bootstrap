@@ -182,4 +182,10 @@ macro(bpf_object name input)
   target_include_directories(${OUTPUT_TARGET} INTERFACE ${CMAKE_CURRENT_BINARY_DIR})
   target_include_directories(${OUTPUT_TARGET} SYSTEM INTERFACE ${LIBBPF_INCLUDE_DIRS})
   target_link_libraries(${OUTPUT_TARGET} INTERFACE ${LIBBPF_LIBRARIES} -lelf -lz)
+
+  # This creates fake targets for CLion to index those .bpf.c files
+  add_library(${OUTPUT_TARGET}_fake STATIC ${BPF_C_FILE})
+  target_include_directories(${OUTPUT_TARGET}_fake PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+  target_include_directories(${OUTPUT_TARGET}_fake PRIVATE ${LIBBPF_INCLUDE_DIRS})
+  target_include_directories(${OUTPUT_TARGET}_fake PRIVATE ${GENERATED_VMLINUX_DIR})
 endmacro()
